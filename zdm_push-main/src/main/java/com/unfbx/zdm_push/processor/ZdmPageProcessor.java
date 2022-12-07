@@ -43,6 +43,17 @@ public class ZdmPageProcessor implements PageProcessor {
         //server 酱推送限制长度256
 
 
+        //关键词筛选
+        if(name.contains("奶"));
+        if (name.contains("奶")) {
+            page.putField("flag", true);
+        }else {
+            //不推送
+            page.putField("flag",false);
+            return;
+        }
+
+
         if(StringUtils.isNotBlank(name) && name.length() > 256){
             name = name.substring(0,200);
         }
