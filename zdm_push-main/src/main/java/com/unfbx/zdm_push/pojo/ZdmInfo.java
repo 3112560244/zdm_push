@@ -2,6 +2,9 @@ package com.unfbx.zdm_push.pojo;
 
 import lombok.Data;
 
+import java.util.List;
+import java.util.Map;
+
 /**
  * @Description
  * @Author Grt
@@ -16,4 +19,6 @@ public class ZdmInfo {
 
     private String image;
     private String text;
+
+    private List<Map<String,String>> mapList;
 }

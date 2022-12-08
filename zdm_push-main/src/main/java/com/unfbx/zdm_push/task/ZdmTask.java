@@ -52,7 +52,7 @@ public class ZdmTask {
             Spider.create(keyPageProcessor)
                     .addUrl("https://search.smzdm.com/?c=faxian&s=" + key + "&order=time&v=b")
                     .addPipeline(keyPipeline)
-                    .thread(1)
+                    .thread(10)
                     .run();
         }
 //        for (String uid : uids){

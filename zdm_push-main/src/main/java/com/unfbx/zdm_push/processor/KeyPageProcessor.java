@@ -52,19 +52,31 @@ public class KeyPageProcessor implements PageProcessor {
         String text = "";
         //判断是否为列表的url
         if(!page.getUrl().regex("https://www.smzdm.com/p/.*").match()) {
-            url = page.getHtml().xpath("/html/body/div[1]/div/div/div[1]/div[2]/ul/li[1]/div/div[2]/h5/a[1]").$("a","href").toString();
-            name = page.getHtml().xpath("/html/body/div[1]/div/div/div[1]/div[2]/ul/li[1]/div/div[2]/h5/a[1]").$("a","title").toString();
-            toUrl = url;
 
-            //跳转详情页
-            Request request = new Request(toUrl);
-            request.putExtra("url", url);
-            request.putExtra("name", name);
+            for(int i=1;i<=20;i++){
+//                url = page.getHtml().xpath("/html/body/div[1]/div/div/div[1]/div[2]/ul/li[1]/div/div[2]/h5/a[1]").$("a","href").toString();
+                url = page.getHtml().xpath("/html/body/div[1]/div/div/div[1]/div[2]/ul/li["+i+"]/div/div[2]/h5/a[1]").$("a","href").toString();
+                name = page.getHtml().xpath("/html/body/div[1]/div/div/div[1]/div[2]/ul/li["+i+"]/div/div[2]/h5/a[1]").$("a","title").toString();
 
-            //setSkip()  设置skip之后,这个页面的结果不会被Pipeline
-            page.setSkip(true);
 
-            page.addTargetRequest(request);
+                toUrl = url;
+
+                String price = page.getHtml().xpath("/html/body/div[1]/div/div/div[1]/div[2]/ul/li["+i+"]/div/div[2]/h5/a[2]/div/text()").toString();
+                url+="\n"+"价格："+price;
+
+                //跳转详情页
+                Request request = new Request(toUrl);
+
+                request.putExtra("url", url);
+                request.putExtra("name", name);
+                request.putExtra("num",i);
+                //setSkip()  设置skip之后,这个页面的结果不会被Pipeline
+                page.setSkip(true);
+
+                page.addTargetRequest(request);
+            }
+
+
 
 
         }else {
@@ -76,6 +88,19 @@ public class KeyPageProcessor implements PageProcessor {
 
             url = (String) page.getRequest().getExtra("url");
             name = (String) page.getRequest().getExtra("name");
+
+//            //小于20  不走
+//            int num = (Integer) page.getRequest().getExtra("i");
+//            if(num<20){
+//                page.setSkip(true);
+//            }
+
+//            HashMap<String, String> hashMap = new HashMap<>();
+//            hashMap.put("线报url",url);
+//            hashMap.put("线报标题",name);
+//            hashMap.put("详细内容",text);
+//            hashMap.put("图片地址",image);
+
 
             page.putField("url",url);
             page.putField("name",name);
@@ -91,8 +116,7 @@ public class KeyPageProcessor implements PageProcessor {
             }
 
             //server 酱推送限制长度256
-            String price = page.getHtml().xpath("/html/body/div[1]/div/div/div[1]/div[2]/ul/li[1]/div/div[2]/h5/a[2]/div/text()").toString();
-            url+="\n"+price;
+
 
 
 
