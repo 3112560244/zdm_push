@@ -12,4 +12,8 @@ public class ZdmInfo {
 
     private String url;
     private String name;
+
+
+    private String image;
+    private String text;
 }

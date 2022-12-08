@@ -35,6 +35,20 @@ public class KeyPipeline implements Pipeline {
         ZdmInfo zdmInfo = new ZdmInfo();
         zdmInfo.setName(resultItems.get("name"));
         zdmInfo.setUrl(resultItems.get("url"));
+
+        if(null != resultItems.get("image")){
+            zdmInfo.setImage(resultItems.get("image"));
+        }else {
+            zdmInfo.setImage("暂无");
+        }
+
+        if(null != resultItems.get("text")){
+            zdmInfo.setText(resultItems.get("text"));
+        }else {
+            zdmInfo.setText("暂无");
+        }
+
+
         if (resultItems.get("flag")){
             if(StringUtils.isBlank(keyType)){
                 log.info("~~~~~~~~~~~~~~~~为配置微信推送类型，到application.yml配置~~~~~~~~~~~~~~~~");

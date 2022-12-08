@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,9 +27,9 @@ import java.util.Map;
 public class ServerPush {
 
 
-    @Autowired
+    @Resource
     private ServerJPushApi serverJPushApi;
-    @Autowired
+    @Resource
     private ServerPushPlusApi serverPushPlusApi;
     /**
      * 私人密钥
@@ -61,7 +62,7 @@ public class ServerPush {
         Map<String,String> param = new HashMap<>();
         param.put("token",keyValue);
         param.put("title",zdmInfo.getName());
-        param.put("content",zdmInfo.getUrl());
+        param.put("content",zdmInfo.getUrl()+"\n"+zdmInfo.getText()+"\n"+zdmInfo.getImage());
         param.put("template","html");
         ServerPushPlusResponse serverPushResponse = serverPushPlusApi.sendToServerPushPlus(param);
 

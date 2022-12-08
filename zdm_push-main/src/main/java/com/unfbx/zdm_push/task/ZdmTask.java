@@ -1,9 +1,9 @@
 package com.unfbx.zdm_push.task;
 
 import com.unfbx.zdm_push.pipeline.KeyPipeline;
-import com.unfbx.zdm_push.pipeline.ZdmPipeline;
+//import com.unfbx.zdm_push.pipeline.ZdmPipeline;
 import com.unfbx.zdm_push.processor.KeyPageProcessor;
-import com.unfbx.zdm_push.processor.ZdmPageProcessor;
+//import com.unfbx.zdm_push.processor.ZdmPageProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,8 +23,8 @@ import javax.annotation.Resource;
 public class ZdmTask {
 
     private int i;
-    @Resource
-    private ZdmPipeline zdmPipeline;
+//    @Resource
+//    private ZdmPipeline zdmPipeline;
 
     @Resource
     private KeyPipeline keyPipeline;
@@ -35,7 +35,7 @@ public class ZdmTask {
     @Value("${keys.keys}")
     private String[] keys;
 
-    ZdmPageProcessor zdmPageProcessor = new ZdmPageProcessor();
+//    ZdmPageProcessor zdmPageProcessor = new ZdmPageProcessor();
     KeyPageProcessor keyPageProcessor = new KeyPageProcessor();
     /**
      * 十分钟执行一次
@@ -50,7 +50,7 @@ public class ZdmTask {
         }
         for (String key : keys) {
             Spider.create(keyPageProcessor)
-                    .addUrl("https://search.smzdm.com/?c=home&s=" + key + "&v=b&mx_v=a")
+                    .addUrl("https://search.smzdm.com/?c=faxian&s=" + key + "&order=time&v=b")
                     .addPipeline(keyPipeline)
                     .thread(1)
                     .run();
