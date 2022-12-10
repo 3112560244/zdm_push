@@ -6,7 +6,9 @@ import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,7 +16,10 @@ import java.util.Map;
  * @Author Grt
  * @Date 2020-12-11
  */
+
 public class KeyPageProcessor implements PageProcessor {
+
+    private List<Map<String,String>> list = new ArrayList<Map<String, String>>();
 
     private Site site = Site.me()
             .setRetryTimes(3)
@@ -27,6 +32,8 @@ public class KeyPageProcessor implements PageProcessor {
      * 防止重复发送,比较上次发送数据
      */
     private Map<String,Integer> data = new HashMap<>();
+
+    @Pointcut
     @Override
     public void process(Page page) {
 
@@ -52,7 +59,7 @@ public class KeyPageProcessor implements PageProcessor {
         String text = "";
         //判断是否为列表的url
         if(!page.getUrl().regex("https://www.smzdm.com/p/.*").match()) {
-
+            list = new ArrayList<Map<String, String>>();
             for(int i=1;i<=20;i++){
 //                url = page.getHtml().xpath("/html/body/div[1]/div/div/div[1]/div[2]/ul/li[1]/div/div[2]/h5/a[1]").$("a","href").toString();
                 url = page.getHtml().xpath("/html/body/div[1]/div/div/div[1]/div[2]/ul/li["+i+"]/div/div[2]/h5/a[1]").$("a","href").toString();
@@ -82,56 +89,73 @@ public class KeyPageProcessor implements PageProcessor {
         }else {
 //            image = page.getHtml().xpath("/html/body/div[1]/div/section[1]/article/div[1]/div[3]/div[1]/div/div[1]/img").$("img","src").toString();
             image = page.getHtml().xpath("/html/body/div[1]/div/section[1]/article/div[1]/div[3]/div[1]/div/div[1]/img").$("img","ref").toString();
-
             text = page.getHtml().xpath("/html/body/div[1]/div/section[1]/article/div[1]/div[3]/article/div[1]/p/text()").toString();
+
+            if(image ==null)
+                image = "图片暂无";
+            if(text ==null)
+                text = "详情暂无";
 
 
             url = (String) page.getRequest().getExtra("url");
             name = (String) page.getRequest().getExtra("name");
 
+
 //            //小于20  不走
-//            int num = (Integer) page.getRequest().getExtra("i");
-//            if(num<20){
-//                page.setSkip(true);
-//            }
-
-//            HashMap<String, String> hashMap = new HashMap<>();
-//            hashMap.put("线报url",url);
-//            hashMap.put("线报标题",name);
-//            hashMap.put("详细内容",text);
-//            hashMap.put("图片地址",image);
-
-
-            page.putField("url",url);
-            page.putField("name",name);
-
-            page.putField("image",image);
-            page.putField("text",text);
+            int num = (Integer) page.getRequest().getExtra("num");
+            if(num<20){
+                page.setSkip(true);
+            }
 
 
 
 
+//            page.putField("url",url);
+//            page.putField("name",name);
+//
+//            page.putField("image",image);
+//            page.putField("text",text);
+
+
+
+
+            //server 酱推送限制长度256
             if(StringUtils.isNotBlank(name) && name.length() > 256){
                 name = name.substring(0,200);
             }
-
-            //server 酱推送限制长度256
-
-
 
 
             //默认不推送  筛选是否重复
             page.putField("flag",false);
             if(StringUtils.isNotBlank(name)){
                 String[] split = name.split("/");
-                //存在不推送
-                if(data.get(split[split.length-1]) != null){
+                //不存在 data中
+                if(data.get(split[split.length-1]) == null){
+
+                    HashMap<String, String> hashMap = new HashMap<>();
+                    hashMap.put("线报url",url);
+                    hashMap.put("线报标题",name);
+                    hashMap.put("详细内容",text);
+                    hashMap.put("图片地址",image);
+                    //不存在存进去
+                    data.put(split[split.length-1],1);
+                    list.add(hashMap);
+                }
+
+                if(num<20){
                     page.putField("flag",false);
                     return;
                 }
-                page.putField("flag",true);
-                //不存在存进去
-                data.put(split[split.length-1],1);
+
+                if(list.size()>0){
+                    page.putField("flag",true);
+                }else {
+                    page.putField("flag",false);
+                }
+
+                page.putField("list",list);
+
+
             }
 
         }
@@ -142,5 +166,6 @@ public class KeyPageProcessor implements PageProcessor {
     public Site getSite() {
         return site;
     }
+
 
 }

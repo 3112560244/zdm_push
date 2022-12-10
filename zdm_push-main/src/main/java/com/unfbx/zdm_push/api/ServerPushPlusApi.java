@@ -2,8 +2,8 @@ package com.unfbx.zdm_push.api;
 
 import com.github.lianjiatech.retrofit.spring.boot.annotation.RetrofitClient;
 import com.unfbx.zdm_push.constant.ServerPushPlusResponse;
-import retrofit2.http.GET;
-import retrofit2.http.Query;
+import retrofit2.http.Body;
+import retrofit2.http.POST;
 import retrofit2.http.QueryMap;
 
 import java.util.Map;
@@ -15,6 +15,6 @@ import java.util.Map;
  */
 @RetrofitClient(baseUrl = "http://www.pushplus.plus/")
 public interface ServerPushPlusApi {
-    @GET("send")
-    ServerPushPlusResponse sendToServerPushPlus(@QueryMap Map<String,String> param);
+    @POST("send")
+    ServerPushPlusResponse sendToServerPushPlus(@Body Map<String,String> param);
 }

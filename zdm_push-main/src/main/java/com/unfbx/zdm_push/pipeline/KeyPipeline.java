@@ -33,20 +33,22 @@ public class KeyPipeline implements Pipeline {
     @Override
     public void process(ResultItems resultItems, Task task) {
         ZdmInfo zdmInfo = new ZdmInfo();
-        zdmInfo.setName(resultItems.get("name"));
-        zdmInfo.setUrl(resultItems.get("url"));
+//        zdmInfo.setName(resultItems.get("name"));
+//        zdmInfo.setUrl(resultItems.get("url"));
+        zdmInfo.setMapList(resultItems.get("list"));
 
-        if(null != resultItems.get("image")){
-            zdmInfo.setImage(resultItems.get("image"));
-        }else {
-            zdmInfo.setImage("暂无");
-        }
 
-        if(null != resultItems.get("text")){
-            zdmInfo.setText(resultItems.get("text"));
-        }else {
-            zdmInfo.setText("暂无");
-        }
+//        if(null != resultItems.get("image")){
+//            zdmInfo.setImage(resultItems.get("image"));
+//        }else {
+//            zdmInfo.setImage("暂无");
+//        }
+//
+//        if(null != resultItems.get("text")){
+//            zdmInfo.setText(resultItems.get("text"));
+//        }else {
+//            zdmInfo.setText("暂无");
+//        }
 
 
         if (resultItems.get("flag")){

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -61,9 +62,24 @@ public class ServerPush {
         }
         Map<String,String> param = new HashMap<>();
         param.put("token",keyValue);
-        param.put("title",zdmInfo.getName());
-        param.put("content",zdmInfo.getUrl()+"\n"+zdmInfo.getText()+"\n"+zdmInfo.getImage());
+        param.put("title","近20条数据");
+
+        List<Map<String, String>> mapList = zdmInfo.getMapList();
+        String content = "";
+        for(int i = 0; i< mapList.size(); i++){
+            content+=i+"\n";
+            Map<String, String> map = mapList.get(i);
+            content +="线报url  "+map.get("线报url")+"\n";
+            content +="线报标题  "+map.get("线报标题")+"\n";
+            content +="详细内容  "+map.get("详细内容")+"\n";
+            content +="图片地址  "+map.get("图片地址")+"\n";
+        }
+
+        param.put("content",content);
         param.put("template","html");
+        //群组 不填推送给自己
+        param.put("topic","奶");
+
         ServerPushPlusResponse serverPushResponse = serverPushPlusApi.sendToServerPushPlus(param);
 
         if (serverPushResponse == null){

@@ -5,6 +5,16 @@ server:
 spring:
   application:
     name: zdm
+
+  redis:
+    port: 6379
+    url: 39.105.0.57
+    # 使用的数据库索引，默认是0
+    database: 0
+    # 连接超时时间
+    timeout: 1800000
+    password: qazwsx4.6
+
 key:
   #支持两种配置：【pushPlus】或者【serverJ】，二选一
   #pushPlus参考：http://pushplus.hxtrip.com/，不限制次数，不用github账号
@@ -24,5 +34,8 @@ keys:
 #corn: 0/10 * * * * ?
 # 三十秒一次
 #corn: 0/30 * * * * ?
-# 一分钟一次
-corn: 0/59 * * * * ?
+# 十分钟一次
+#corn: 0 0/10 * * * ?
+# 三十分钟一次
+corn: 0 0/30 * * * ?
+
