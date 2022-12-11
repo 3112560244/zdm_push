@@ -1,5 +1,5 @@
 server:
-  port: 8899
+  port: 8082
   tomcat:
     connection-timeout: 18000000
 spring:
